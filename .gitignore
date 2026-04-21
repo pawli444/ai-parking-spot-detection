@@ -1,1 +1,10 @@
 dataset/
+.venv*
+venv/
+__pycache__/
+*.pyc
+.idea/
+
+src/runs/detect/train*/images/
+src/runs/detect/train*/labels/
+src/yolov8n.pt
