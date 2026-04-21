@@ -1,10 +1,36 @@
-dataset/
+## Dataset: keep metadata but ignore bulky image/label folders
+dataset/**/images/
+dataset/**/labels/
+!dataset/data.yaml
+!dataset/README.dataset.txt
+
+# Python envs
 .venv*
 venv/
+
+# Byte-compiled / cache
 __pycache__/
 *.pyc
-.idea/
 
-src/runs/detect/train*/images/
-src/runs/detect/train*/labels/
-src/yolov8n.pt
+# IDEs
+.idea/
+.vscode/
+
+# Training runs and results
+/runs/
+src/runs/
+*/runs/
+
+# Model weights and large binaries
+*.pt
+*.pth
+yolov8n.pt
+
+# Config / secrets
+.env
+
+# Misc
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.DS_Store
