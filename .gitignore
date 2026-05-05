@@ -1,0 +1,12 @@
+dataset/
+.venv*
+venv/
+__pycache__/
+*.pyc
+.idea/
+
+src/runs/detect/train*/images/
+src/runs/detect/train*/labels/
+src/yolov8n.pt
+src/yolov8m.pt
+src/runs/detect/train-night-medium/weights/*.pt
