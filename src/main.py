@@ -28,30 +28,30 @@ import os
 #     cv2.waitKey(0)
 #     cv2.destroyAllWindows()
 
-from ultralytics import YOLO
-
+# (import YOLO above) - avoid duplicate import
 
 def main():
-    # 1. Zmieniamy model bazowy na Medium (pobierze się automatycznie ok. 50MB)
+    
     model = YOLO('yolov8m.pt')
 
-    # 2. Odpalamy ciężki trening na noc
+
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    data_path = os.path.join(project_root, 'dataset', 'data.yaml')
+
     results = model.train(
-        data='C:/Users/Mateusz/PycharmProjects/Parking_spot_detector/ai-parking-spot-detection/dataset/data.yaml',
-
-        epochs=250,  # Dajemy mu ogromny zapas czasu
+        data=data_path,
+        epochs=250,  
         patience=50,
-        # EARLY STOPPING: Jeśli przez 50 epok z rzędu model nie zanotuje żadnej poprawy, sam się wyłączy, żeby nie marnować prądu
-
-        imgsz=640,  # Zostawiamy 640. Większa rozdzielczość przy modelu Medium mogłaby wywalić błąd "CUDA Out of Memory"
+       
+        imgsz=640, 
 
         device=0,
         workers=4,
 
-        # UWAGA: Zmniejszamy batch z 16 na 8! Model 'm' jest ogromny i zjada dużo więcej pamięci VRAM na karcie graficznej.
+       
         batch=8,
 
-        # Nazywamy folder ładnie, żeby rano łatwo go było znaleźć w folderze 'runs'
+       
         name='train-night-medium'
     )
 
