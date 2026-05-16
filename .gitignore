@@ -1,3 +1,23 @@
+# Ignore generated run outputs and media files
+/runs/
+/*.mp4
+/*.avi
+/*.mov
+/*.mkv
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jpg
+*.jpeg
+*.png
+
+# Python
+__pycache__/
+*.pyc
+
+# VSCode
+.vscode/
 dataset/
 .venv*
 venv/
