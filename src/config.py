@@ -11,10 +11,10 @@ PROJECT_DIR = Path(os.environ.get("PROJECT_DIR", str(RUNS_DIR / "detect")))
 DEFAULT_RUN_NAME = os.environ.get("RUN_NAME", "yolov8s_parking_v1")
 DEFAULT_EPOCHS = int(os.environ.get("EPOCHS", "100"))
 DEFAULT_PATIENCE = int(os.environ.get("PATIENCE", "20"))
-DEFAULT_IMG_SIZE = int(os.environ.get("IMG_SIZE", "416"))
+DEFAULT_IMG_SIZE = int(os.environ.get("IMG_SIZE", "640"))
 DEFAULT_BATCH = int(os.environ.get("BATCH", "32"))
 DEFAULT_WORKERS = int(os.environ.get("WORKERS", "4"))
-DEFAULT_CONF = float(os.environ.get("CONF", "0.45"))
+DEFAULT_CONF = float(os.environ.get("CONF", "0.25"))
 
 
 def default_model_path():
