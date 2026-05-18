@@ -7,6 +7,7 @@ __pycache__/
 
 src/runs/detect/train*/images/
 src/runs/detect/train*/labels/
+runs/predict
 src/yolov8n.pt
 src/yolov8m.pt
 src/runs/detect/train-night-medium/weights/*.pt
