@@ -29,4 +29,11 @@ def default_model_path():
 
 
 def default_best_weights(run_name=DEFAULT_RUN_NAME):
-    return PROJECT_DIR / run_name / "weights" / "best.pt"
+    candidates = [
+        PROJECT_DIR / run_name / "weights" / "best.pt",
+        REPO_ROOT / "src" / "runs" / "detect" / run_name / "weights" / "best.pt",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
