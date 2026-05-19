@@ -242,6 +242,40 @@ def run(args):
     labels = {0: "FREE", 1: "OCCUPIED"}
     unknown_color = (180, 180, 180)
 
+    def normalize_name(name):
+        return str(name).strip().lower()
+
+    names = model.names if hasattr(model, "names") else {}
+    if isinstance(names, (list, tuple)):
+        names = {idx: name for idx, name in enumerate(names)}
+    else:
+        names = {int(k): v for k, v in dict(names).items()}
+
+    def find_idx(targets):
+        for idx, name in names.items():
+            if normalize_name(name) in targets:
+                return idx
+        return None
+
+    free_idx = find_idx({"free", "empty", "vacant"})
+    occupied_idx = find_idx({"occupied", "busy", "car", "vehicle"})
+    if free_idx is None:
+        free_idx = 0
+    if occupied_idx is None:
+        occupied_idx = 1
+
+    print(
+        f"Class map: FREE={free_idx} ({names.get(free_idx)}), "
+        f"OCCUPIED={occupied_idx} ({names.get(occupied_idx)})"
+    )
+
+    def map_class(cls):
+        if cls == free_idx:
+            return 0
+        if cls == occupied_idx:
+            return 1
+        return None
+
     lock_spots = args.lock_spots
     spot_match = args.spot_match or "iou"
     if args.spots_file:
@@ -351,10 +385,14 @@ def run(args):
                     spot_hits.append(1)
 
             for det_box, cls, conf in detections:
+                mapped = map_class(cls)
+                if mapped is None:
+                    continue
+
                 x1, y1, x2, y2 = map(int, det_box)
-                color = colors.get(cls, (255, 255, 255))
+                color = colors.get(mapped, (255, 255, 255))
                 cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                label = f"{labels.get(cls, str(cls))} {conf:.2f}"
+                label = f"{labels.get(mapped, str(mapped))} {conf:.2f}"
                 (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.45, 1)
                 cv2.rectangle(frame, (x1, y1 - th - 4), (x1 + tw, y1), color, -1)
                 cv2.putText(frame, label, (x1, y1 - 3), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
@@ -382,10 +420,13 @@ def run(args):
                 best_cls = None
                 best_conf = 0.0
                 for det_box, cls, conf in detections:
+                    mapped = map_class(cls)
+                    if mapped is None:
+                        continue
                     score = spot_match_score(spot, det_box, spot_match)
                     if score > best_score:
                         best_score = score
-                        best_cls = cls
+                        best_cls = mapped
                         best_conf = conf
                 if spot_match == "center":
                     matched = best_score > 0.0
@@ -433,12 +474,16 @@ def run(args):
             stats_history.append(counts.copy())
         else:
             for det_box, cls, conf in detections:
-                counts[cls] += 1
+                mapped = map_class(cls)
+                if mapped is None:
+                    continue
+
+                counts[mapped] += 1
 
                 x1, y1, x2, y2 = map(int, det_box)
-                color = colors.get(cls, (255, 255, 255))
+                color = colors.get(mapped, (255, 255, 255))
                 cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                label = f"{labels.get(cls, str(cls))} {conf:.2f}"
+                label = f"{labels.get(mapped, str(mapped))} {conf:.2f}"
                 (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.45, 1)
                 cv2.rectangle(frame, (x1, y1 - th - 4), (x1 + tw, y1), color, -1)
                 cv2.putText(frame, label, (x1, y1 - 3), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
