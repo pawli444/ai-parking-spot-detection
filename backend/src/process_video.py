@@ -4,7 +4,7 @@ import cv2
 from ultralytics import YOLO
 
 
-def process_video(input_path, spots_json_path=None, model_path=None, output_path=None, conf=0.4, margin=15, progress_callback=None):
+def process_video(input_path, spots_json_path=None, model_path=None, output_path=None, conf=0.4, imgsz=640, margin=15, progress_callback=None):
     if spots_json_path is None:
         spots_json_path = os.path.join(os.path.dirname(__file__), 'miejsca_parkingowe.json')
 
@@ -60,7 +60,7 @@ def process_video(input_path, spots_json_path=None, model_path=None, output_path
             if crop.size == 0:
                 continue
 
-            results = model.predict(source=crop, conf=conf, imgsz=640, verbose=False)
+            results = model.predict(source=crop, conf=conf, imgsz=imgsz, verbose=False)
 
             is_occupied = False
             for r in results:

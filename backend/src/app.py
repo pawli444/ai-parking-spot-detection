@@ -23,7 +23,7 @@ SPOTS_JSON = os.path.join(os.path.dirname(__file__), 'miejsca_parkingowe.json')
 JOBS = {}
 
 
-def _worker_job(job_id, in_path, out_path, model_path):
+def _worker_job(job_id, in_path, out_path, model_path, conf, imgsz, margin):
     JOBS[job_id]['status'] = 'processing'
 
     def progress_cb(pct):
@@ -34,7 +34,9 @@ def _worker_job(job_id, in_path, out_path, model_path):
 
     print(f"[job {job_id}] started. input={in_path} output={out_path}")
     try:
-        result = process_video(in_path, spots_json_path=SPOTS_JSON, model_path=model_path, output_path=out_path, progress_callback=progress_cb)
+        result = process_video(in_path, spots_json_path=SPOTS_JSON, model_path=model_path,
+                       output_path=out_path, conf=conf, imgsz=imgsz, margin=margin,
+                       progress_callback=progress_cb)
         # attempt to transcode to browser-friendly H.264 MP4 using ffmpeg
         transcoded = None
         ffmpeg_path = shutil.which('ffmpeg')
@@ -76,10 +78,33 @@ def upload():
 
     model_path = request.form.get('model') or DEFAULT_MODEL
 
+    # parse optional processing parameters
+    def _parse_float(name, default):
+        v = request.form.get(name)
+        if v is None or v == '':
+            return default
+        try:
+            return float(v)
+        except Exception:
+            return default
+
+    def _parse_int(name, default):
+        v = request.form.get(name)
+        if v is None or v == '':
+            return default
+        try:
+            return int(v)
+        except Exception:
+            return default
+
+    conf = _parse_float('conf', 0.4)
+    imgsz = _parse_int('imgsz', 640)
+    margin = _parse_int('margin', 15)
+
     job_id = str(uuid.uuid4())
     JOBS[job_id] = {'status': 'queued', 'progress': 0, 'output': None, 'error': None}
 
-    t = threading.Thread(target=_worker_job, args=(job_id, in_path, out_path, model_path), daemon=True)
+    t = threading.Thread(target=_worker_job, args=(job_id, in_path, out_path, model_path, conf, imgsz, margin), daemon=True)
     t.start()
 
     return jsonify({'job_id': job_id}), 202
