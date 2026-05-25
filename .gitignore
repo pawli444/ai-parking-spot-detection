@@ -1,4 +1,27 @@
+# Ignore generated run outputs and media files
+/runs/
+/*.mp4
+/*.avi
+/*.mov
+/*.mkv
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jpg
+*.jpeg
+*.png
+
+# Python
+__pycache__/
+*.pyc
+
+# VSCode
+.vscode/
 dataset/
+CNR-EXT_FULL_IMAGE_1000x750/
+CNR_EXT_YOLO/
+CNR-EXT-Patches-150x150/
 .venv*
 venv/
 __pycache__/
@@ -7,7 +30,6 @@ __pycache__/
 
 src/runs/detect/train*/images/
 src/runs/detect/train*/labels/
-runs/predict
 src/yolov8n.pt
 src/yolov8m.pt
 src/runs/detect/train-night-medium/weights/*.pt

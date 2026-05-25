@@ -161,7 +161,7 @@ def match_spot(det_box, spots, iou_thresh, center_dist_frac=0.6):
 # ---------------------------------------------------------------------------
 
 def run_model(frame, model, conf, imgsz, device):
-    results = model(frame, conf=conf, imgsz=imgsz, device=device, verbose=False)[0]
+    results = model(frame, conf=conf, imgsz=imgsz, device=device, augment=True, verbose=False)[0]
     dets = []
     for box in results.boxes:
         cls = int(box.cls[0])
