@@ -1,8 +1,0 @@
-path: C:\Users\pawli\Desktop\Programowanie\ai-parking-spot-detection\dataset
-train: train/images
-val: valid/images
-test: test/images
-nc: 2
-names:
-- empty
-- occupied

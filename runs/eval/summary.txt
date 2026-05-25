@@ -1,8 +1,0 @@
-TP=35187
-FP=21454
-FN=1397
-TN=33990
-Precision=0.6212
-Recall=0.9618
-F1=0.7549
-Accuracy=0.7517
