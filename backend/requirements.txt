@@ -3,3 +3,6 @@ opencv-python
 matplotlib
 pyyaml
 numpy
+flask
+flask-cors
+werkzeug
