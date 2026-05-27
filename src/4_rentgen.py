@@ -8,10 +8,10 @@ from ultralytics import YOLO
 VIDEO_PATH = "video_dwa.mp4"
 JSON_PATH = "miejsca_parkingowe.json"
 
-# WRACAMY DO MODELU V3! (V4 okazało się przeuczone)
-MODEL_PATH = r"C:\Users\Mateusz\PycharmProjects\Parking_spot_detector\src\runs\detect\doszkoleniev3\weights\best.pt"
+# Podpinamy Twój nowy, odporny na cienie model V4
+MODEL_PATH = r"C:\Users\Mateusz\PycharmProjects\Parking_spot_detector\src\runs\detect\doszkoleniev4\weights\best.pt"
 
-print("Ładowanie sprawdzonego modelu (V3)...")
+print("Ładowanie modelu (best.pt z V4)...")
 model = YOLO(MODEL_PATH)
 
 try:
@@ -22,6 +22,7 @@ except FileNotFoundError:
     exit()
 
 cap = cv2.VideoCapture(VIDEO_PATH)
+
 print("Wideo działa. Wciśnij klawisz 'q' w oknie z filmem, aby wyłączyć.")
 
 # =========================================
@@ -48,16 +49,16 @@ while True:
             continue
 
         # --- HACK INŻYNIERYJNY: Obracamy poziome miejsca o 90 stopni ---
-        # Twój model V3 kocha pionowe auta, więc mu je dajemy!
+        # Dzięki temu Twój model V4 dostaje auto w pionie (tak jak lubi najbardziej)
         if w > h:
             crop = cv2.rotate(crop, cv2.ROTATE_90_CLOCKWISE)
 
-        # Puszczamy predykcję (conf=0.35 to idealny kompromis dla V3)
-        results = model.predict(source=crop, conf=0.35, imgsz=640, verbose=False)
+        # Puszczamy predykcję (conf=0.25 bo model V4 lepiej radzi sobie z cieniami)
+        results = model.predict(source=crop, conf=0.25, imgsz=640, verbose=False)
 
         # --- ZASADA NAJWYŻSZEJ PEWNOŚCI ---
         najwyzsza_pewnosc = 0.0
-        najlepsza_klasa = 'empty'
+        najlepsza_klasa = 'empty' # Domyślnie zakładamy, że wolne
 
         for r in results:
             for box in r.boxes:
@@ -65,11 +66,12 @@ while True:
                 klasa_id = int(box.cls[0])
                 nazwa_klasy = model.names[klasa_id]
 
+                # Bierzemy to, czego model jest najbardziej pewny
                 if conf > najwyzsza_pewnosc:
                     najwyzsza_pewnosc = conf
                     najlepsza_klasa = nazwa_klasy
 
-        # System uznaje miejsce za zajęte tylko wtedy, gdy 'occupied' wygrało
+        # Miejsce jest czerwone tylko, gdy wygrała klasa 'occupied'
         is_occupied = (najlepsza_klasa == 'occupied')
 
         # =========================================
@@ -85,7 +87,7 @@ while True:
         cv2.putText(frame, f"ID: {spot['id']}", (x + 5, y - 5),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
-    cv2.imshow("System Monitorowania Parkingu - Ostateczna Wersja", frame)
+    cv2.imshow("System Monitorowania Parkingu", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
