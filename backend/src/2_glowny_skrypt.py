@@ -8,7 +8,7 @@ from ultralytics import YOLO
 VIDEO_PATH = "video_dwa.mp4"
 JSON_PATH = "miejsca_parkingowe.json"
 
-MODEL_PATH = r"C:\Users\Mateusz\PycharmProjects\Parking_spot_detector\src\runs\detect\doszkoleniev3\weights\best.pt"
+MODEL_PATH = r"C:\Users\Mateusz\PycharmProjects\Parking_spot_detector\backend\src\runs\detect\doszkoleniev2\weights\best.pt"
 
 print("Ładowanie modelu (best.pt)...")
 model = YOLO(MODEL_PATH)
@@ -17,7 +17,7 @@ try:
     with open(JSON_PATH, "r") as f:
         spots = json.load(f)
 except FileNotFoundError:
-    print(f"❌ Błąd: Nie znaleziono {JSON_PATH}. Wyklikaj najpierw miejsca!")
+    print(f"")
     exit()
 
 cap = cv2.VideoCapture(VIDEO_PATH)
@@ -36,8 +36,8 @@ while True:
     for spot in spots:
         # Ignorujemy poziome auta z prawej strony (ID 15-22), bo dataset ich nie ogarnia
         # Ignorujemy TYLKO miejsca od 15 do 22 (poziome z prawej)
-        if 15 <= spot["id"] <= 22:
-            continue
+        # if 15 <= spot["id"] <= 22:
+        #     continue
 
         x, y, w, h = spot["x"], spot["y"], spot["w"], spot["h"]
 

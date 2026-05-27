@@ -15,7 +15,7 @@
 # Python
 __pycache__/
 *.pyc
-ai-parking-spot-detection/
+
 # VSCode
 .vscode/
 dataset/
