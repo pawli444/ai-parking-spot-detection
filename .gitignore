@@ -27,7 +27,7 @@ venv/
 __pycache__/
 *.pyc
 .idea/
-
+ai-parking-spot-detection/
 src/runs/detect/train*/images/
 src/runs/detect/train*/labels/
 src/yolov8n.pt
