@@ -33,3 +33,20 @@ src/runs/detect/train*/labels/
 src/yolov8n.pt
 src/yolov8m.pt
 src/runs/detect/train-night-medium/weights/*.pt
+
+# 1. Modele AI i wagi PyTorch
+*.pt
+*.pth
+
+# 2. Archiwa i duże zbiory danych
+*.zip
+dataset/
+dataset_classifier/
+
+# 3. Dynamiczne pliki backendu (uploady uzytkownikow, logi)
+backend/uploads/
+*.csv
+
+# 4. Automatycznie generowane logi z YOLO
+runs/
+backend/src/runs/

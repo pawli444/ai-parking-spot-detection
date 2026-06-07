@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 import os
 
-model_path = os.path.join(os.path.dirname(__file__), 'runs', 'detect', 'train-9', 'weights', 'best.pt')
+model_path = os.path.join(os.path.dirname(__file__), 'runs', 'detect', 'train-9', 'weights', 'klasyfikator.pt')
 img_path = os.path.join(os.path.dirname(__file__), 'moj_test.jpg')
 
 print('Model path:', model_path)

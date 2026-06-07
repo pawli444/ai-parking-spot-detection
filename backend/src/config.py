@@ -29,4 +29,4 @@ def default_model_path():
 
 
 def default_best_weights(run_name=DEFAULT_RUN_NAME):
-    return PROJECT_DIR / run_name / "weights" / "best.pt"
+    return PROJECT_DIR / run_name / "weights" / "klasyfikator.pt"

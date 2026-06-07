@@ -10,7 +10,7 @@ JSON_PATH = "miejsca_parkingowe.json"
 
 MODEL_PATH = r"C:\Users\Mateusz\PycharmProjects\Parking_spot_detector\backend\src\runs\detect\doszkoleniev2\weights\best.pt"
 
-print("Ładowanie modelu (best.pt)...")
+print("Ładowanie modelu (klasyfikator.pt)...")
 model = YOLO(MODEL_PATH)
 
 try:

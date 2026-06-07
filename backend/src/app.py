@@ -92,12 +92,10 @@ def upload():
 
     job_id = str(uuid.uuid4())
 
-    # zapisujemy wideo
     vid_filename = secure_filename(f_vid.filename)
     in_path = os.path.join(UPLOAD_DIR, vid_filename)
     f_vid.save(in_path)
 
-    # zapisujemy json z przedrostkiem job_id zeby sie nie nadpisalo jak ktos wgra taki sam
     spots_filename = f"{job_id}_{secure_filename(f_spots.filename)}"
     spots_path = os.path.join(UPLOAD_DIR, spots_filename)
     f_spots.save(spots_path)
@@ -124,7 +122,6 @@ def upload():
 
     JOBS[job_id] = {'status': 'queued', 'progress': 0, 'output': None, 'csv': None, 'plot': None, 'error': None}
 
-    # przesylamy sciezke jsona do workera
     t = threading.Thread(
         target=_worker_job,
         args=(job_id, in_path, out_path, model_path, spots_path, conf, imgsz, margin, iou, device, save_flag),

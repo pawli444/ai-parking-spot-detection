@@ -16,7 +16,6 @@ function App() {
   const [saveFlag, setSaveFlag] = useState<boolean>(false)
   const [margin, setMargin] = useState<number>(15)
 
-  // osobne stany na dwa rozne pliki
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null)
   const [selectedSpots, setSelectedSpots] = useState<File | null>(null)
 
@@ -34,7 +33,6 @@ function App() {
     try {
       const fd = new FormData()
       fd.append('video', selectedVideo, selectedVideo.name)
-      // dodajemy jsona do pakiety
       fd.append('spots', selectedSpots, selectedSpots.name)
 
       fd.append('conf', String(conf))
@@ -82,7 +80,6 @@ function App() {
     }
   }
 
-  // handlery inputow
   const onVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files && e.target.files[0]
     if (f) setSelectedVideo(f)

@@ -105,7 +105,7 @@ def run(args):
         verbose=True,
     )
 
-    best = project_dir / args.name / "weights" / "best.pt"
+    best = project_dir / args.name / "weights" / "klasyfikator.pt"
     print(f"Best model: {best}")
     return results
 

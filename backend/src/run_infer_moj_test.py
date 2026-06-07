@@ -5,7 +5,7 @@ import cv2
 
 def run_grid_tests():
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    model_path = os.path.join(repo_root, 'src', 'runs', 'detect', 'train-9', 'weights', 'best.pt')
+    model_path = os.path.join(repo_root, 'src', 'runs', 'detect', 'train-9', 'weights', 'klasyfikator.pt')
     image_path = os.path.join(os.path.dirname(__file__), 'moj_test.jpg')
 
     print('Model path:', model_path)
