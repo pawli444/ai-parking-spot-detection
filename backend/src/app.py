@@ -16,14 +16,14 @@ app = Flask(__name__)
 CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024  # 1GB
 
-# model leci z tej sciezki jak nie podasz innej z frontu
+
 DEFAULT_MODEL = r"C:\Users\Mateusz\PycharmProjects\Parking_spot_detector\backend\src\runs\detect\doszkoleniev2\weights\best.pt"
 
-# tu trzymamy stan zadan
+
 JOBS = {}
 
 
-# dodalismy spots_path jako argument
+
 def _worker_job(job_id, in_path, out_path, model_path, spots_path, conf, imgsz, margin, iou, device, save_flag):
     JOBS[job_id]['status'] = 'processing'
 
@@ -34,7 +34,7 @@ def _worker_job(job_id, in_path, out_path, model_path, spots_path, conf, imgsz, 
 
     print(f"[job {job_id}] started. input={in_path} output={out_path}")
     try:
-        # podajemy spots_path pobrane od uzytkownika zamiast globalnego jsona
+        # podajemy spots_path json
         result = process_video(in_path, spots_json_path=spots_path, model_path=model_path,
                                output_path=out_path, conf=conf, imgsz=imgsz, margin=margin,
                                iou=iou, device=device, save_flag=save_flag,

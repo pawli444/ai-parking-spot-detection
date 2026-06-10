@@ -15,9 +15,7 @@ def process_video(in_path, spots_json_path, model_path, output_path, conf=0.2, i
     print(f"Ładowanie głównego modelu YOLO (Detektor) z: {model_path}")
     detector = YOLO(model_path)
 
-    # ==========================================
-    # TUTAJ PODAJ ŚCIEŻKĘ DO NOWEGO MODELU
-    # ==========================================
+
     KLASYFIKATOR_PATH = r"C:\Users\Mateusz\PycharmProjects\Parking_spot_detector\backend\src\klasyfikator.pt"
     print(f"Ładowanie modelu weryfikującego (Klasyfikator) z: {KLASYFIKATOR_PATH}")
     classifier = YOLO(KLASYFIKATOR_PATH)
@@ -78,7 +76,7 @@ def process_video(in_path, spots_json_path, model_path, output_path, conf=0.2, i
                 if w > h:
                     crop = cv2.rotate(crop, cv2.ROTATE_90_CLOCKWISE)
 
-                # 1. ETAP: Główna detekcja (Twój stary model)
+                # 1.Główna detekcja 
                 results_det = detector.predict(source=crop, conf=conf, imgsz=imgsz, iou=iou, device=device,
                                                verbose=False)
 
@@ -89,7 +87,7 @@ def process_video(in_path, spots_json_path, model_path, output_path, conf=0.2, i
                             is_occupied = True
                             break
 
-                # 2. ETAP: Kaskada (Weryfikacja klasyfikatorem TYLKO gdy zajęte)
+                # 2. ETAP: Kaskada (TYLKO gdy zajęte)
                 if is_occupied:
                     # Klasyfikator sprawdza wycinek
                     results_cls = classifier.predict(source=crop, imgsz=128, verbose=False)
@@ -98,7 +96,7 @@ def process_video(in_path, spots_json_path, model_path, output_path, conf=0.2, i
                     top1_id = results_cls[0].probs.top1
                     top1_name = classifier.names[top1_id]
 
-                    # Jeśli uzna, że to 'not_car' (np. cień), nadpisujemy wynik z pierwszego modelu!
+                    # Jeśli uzna, że to 'not_car' , nadpisujemy wynik z pierwszego modelu!
                     if top1_name == 'not_car':
                         is_occupied = False
 
